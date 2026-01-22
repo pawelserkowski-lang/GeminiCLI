@@ -25,26 +25,22 @@ export {
   BridgePanel,
   CodeBlock,
   ErrorBoundary,
-  ErrorBoundaryDefault,
-} from './components';
-
-export type {
-  ChatContainerProps,
-  SessionSidebarProps,
-  StatusFooterProps,
-  SettingsModalProps,
-} from './components';
-
-// Chat Components
-export {
+  Button,
   MessageList,
-  MessageListDefault,
   ChatInput,
-  ChatInputDefault,
   ModelSelector,
-  ModelSelectorDefault,
   DragDropZone,
+} from './components';
+
+// Chat Components (with defaults)
+export {
+  MessageListDefault,
+  ChatInputDefault,
+  ModelSelectorDefault,
   DragDropZoneDefault,
+  MessageSkeleton,
+  MessageStreamSkeleton,
+  MessageSkeletonDefault,
 } from './components/chat';
 
 export type {
@@ -52,17 +48,21 @@ export type {
   ChatInputProps,
   ModelSelectorProps,
   DragDropZoneProps,
+  MessageSkeletonProps,
 } from './components/chat';
 
 // UI Components
 export {
-  Button,
   ButtonDefault,
   Skeleton,
   SkeletonText,
   SkeletonAvatar,
   SkeletonCard,
   SkeletonMessage,
+  Toast,
+  ToastDefault,
+  ToastContainer,
+  ToastContainerDefault,
 } from './components/ui';
 
 export type {
@@ -72,6 +72,9 @@ export type {
   SkeletonAvatarProps,
   SkeletonCardProps,
   SkeletonMessageProps,
+  ToastProps,
+  ToastVariant,
+  ToastContainerProps,
 } from './components/ui';
 
 // ============================================================================
@@ -96,10 +99,7 @@ export {
   useKeyboardShortcutsDefault,
 } from './hooks';
 
-export type {
-  ToastNotification,
-  UseToastReturn,
-} from './hooks';
+export type { ToastNotification, UseToastReturn } from './hooks';
 
 // ============================================================================
 // SERVICES
@@ -132,13 +132,31 @@ export {
   selectTheme,
   selectProvider,
   selectCount,
+  selectCurrentSessionId,
   selectSessions,
   selectCurrentSession,
-  selectCurrentSessionMessages,
+  selectCurrentMessages,
   selectIsApiKeySet,
   selectSettings,
   selectSessionById,
   selectMessagesBySessionId,
+  selectSessionCount,
+  selectSessionHasMessages,
+  selectSessionMetadata,
+  selectChatHistory,
+  selectMessageCount,
+  selectMessageCountBySessionId,
+  selectHasMessages,
+  selectLastMessage,
+  selectLastMessageBySessionId,
+  selectOllamaEndpoint,
+  selectSystemPrompt,
+  selectDefaultProvider,
+  selectUseSwarm,
+  selectGeminiApiKey,
+  selectIsAppReady,
+  selectApiConfigStatus,
+  selectRuntimeSettings,
 } from './store';
 
 // ============================================================================
@@ -159,10 +177,10 @@ export type {
   KnowledgeNode as KnowledgeNodeType,
   KnowledgeEdge as KnowledgeEdgeType,
   KnowledgeGraph as KnowledgeGraphType,
-  ChatContainerProps as ChatContainerPropsType,
-  SessionSidebarProps as SessionSidebarPropsType,
-  StatusFooterProps as StatusFooterPropsType,
-  SettingsModalProps as SettingsModalPropsType,
+  ChatContainerProps,
+  SessionSidebarProps,
+  StatusFooterProps,
+  SettingsModalProps,
   AppState,
 } from './types';
 
@@ -197,20 +215,3 @@ export {
   sanitizeContent,
   sanitizeTitle,
 } from './utils/validators';
-
-// ============================================================================
-// RE-EXPORT TYPE UTILITIES
-// ============================================================================
-
-// For convenience, also export as type-only re-exports if needed
-export type {
-  MessageRole,
-  Message,
-  Session,
-  Settings,
-  Theme,
-  StreamPayload,
-  BridgeState,
-  BridgeRequest,
-  AppState,
-} from './types';

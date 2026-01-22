@@ -2,9 +2,8 @@
  * GeminiGUI - Main App Component
  * @module App
  *
- * Coordinator component after refactoring.
+ * Coordinator component with proper hook ordering.
  * Uses custom hooks for theme, streaming, and model fetching.
- * Optimized with useMemo and useCallback for performance.
  */
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
@@ -65,8 +64,8 @@ function App() {
   // Custom Hooks
   // ========================================
 
-  // Theme management
-  const { theme, toggleTheme, isDark } = useAppTheme();
+  // Theme management (only use toggleTheme and isDark)
+  const { toggleTheme, isDark } = useAppTheme();
 
   // Environment variables loader
   useEnvLoader();
@@ -74,216 +73,42 @@ function App() {
   // Model fetching
   const { models, isLoading: modelsLoading, error: modelsError } = useGeminiModels();
 
-  // Auto-select first model
-  useEffect(() => {
-    if (models.length > 0 && !selectedModel) {
-      setSelectedModel(models[0]);
-    }
-  }, [models, selectedModel]);
-
   // Stream listeners
   useStreamListeners({
     onChunk: updateLastMessage,
     onComplete: () => setIsStreaming(false),
-    onError: (error) => {
+    onError: (error: unknown) => {
       console.error('[App] Stream error:', error);
       setIsStreaming(false);
     },
   });
 
   // ========================================
-  // Effects
+  // Callbacks (defined BEFORE effects/memos that use them)
   // ========================================
 
-  // Open Live Preview Window on boot
-  useEffect(() => {
-    const openPreview = async () => {
-      const livePreview = await WebviewWindow.getByLabel('live-preview');
-      if (livePreview) {
-        livePreview.show();
-      }
-    };
-    openPreview();
-  }, []);
-
-  // Agentic Tool Execution Detection
-  useEffect(() => {
-    if (isStreaming || currentMessages.length === 0) return;
-
-    const lastMsg = currentMessages[currentMessages.length - 1];
-    if (lastMsg.role === 'assistant') {
-      const match = lastMsg.content.match(COMMAND_PATTERNS.EXECUTE);
-      if (match) {
-        executeCommand(match[1]);
-      }
-    }
-  }, [currentMessages, isStreaming, executeCommand]);
-
-  // ========================================
-  // Memoized Values - Derived State
-  // ========================================
-
-  /**
-   * Memoize current session lookup to prevent recalculation on every render
-   */
-  const currentSession = useMemo(() => {
-    return sessions.find((s) => s.id === currentSessionId);
-  }, [sessions, currentSessionId]);
-
-  /**
-   * Memoize current session messages to prevent array creation on every render
-   */
-  const currentSessionMessages = useMemo(() => {
-    return chatHistory[currentSessionId] || [];
-  }, [chatHistory, currentSessionId]);
-
-  /**
-   * Memoize status badge state - prevents conditional logic on every render
-   */
-  const statusBadgeState = useMemo(() => {
-    if (modelsError) {
-      return { className: 'status-pending', text: STATUS.API_ERROR };
-    }
-    if (settings.geminiApiKey) {
-      return { className: 'status-approved', text: STATUS.GEMINI_READY };
-    }
-    return { className: 'status-pending', text: STATUS.NO_API_KEY };
-  }, [modelsError, settings.geminiApiKey]);
-
-  /**
-   * Memoize swarm button styles and attributes
-   */
-  const swarmButtonAttrs = useMemo(() => {
-    return {
-      className: `p-2 rounded-full transition-colors ${
-        settings.useSwarm
-          ? 'bg-[var(--matrix-accent)] text-black shadow-[0_0_10px_rgba(0,255,65,0.5)]'
-          : 'hover:bg-[var(--matrix-border)] text-[var(--matrix-text-dim)]'
-      }`,
-      title: settings.useSwarm
-        ? 'Tryb Swarm Aktywny (Wolf Swarm)'
-        : 'Aktywuj Tryb Swarm',
-      filled: settings.useSwarm,
-    };
-  }, [settings.useSwarm]);
-
-  /**
-   * Memoize logo src based on theme
-   */
-  const logoSrc = useMemo(() => {
-    return isDark ? '/logodark.webp' : '/logolight.webp';
-  }, [isDark]);
-
-  /**
-   * Memoize header h1 span color class based on theme
-   */
-  const headerSpanClass = useMemo(() => {
-    return isDark ? 'text-white' : 'text-gray-800';
-  }, [isDark]);
-
-  /**
-   * Memoize session sidebar props to prevent unnecessary child re-renders
-   */
-  const sessionSidebarProps = useMemo(
-    () => ({
-      sessions,
-      currentSessionId,
-      onCreateSession: createSession,
-      onSelectSession: selectSession,
-      onDeleteSession: deleteSession,
-      onUpdateTitle: updateSessionTitle,
-    }),
-    [sessions, currentSessionId, createSession, selectSession, deleteSession, updateSessionTitle]
-  );
-
-  /**
-   * Memoize chat container props to prevent unnecessary child re-renders
-   */
-  const chatContainerProps = useMemo(
-    () => ({
-      messages: currentMessages,
-      isStreaming,
-      modelsLoading,
-      modelsError,
-      models,
-      selectedModel,
-      onSelectModel: setSelectedModel,
-      onSubmit: handleSubmit,
-      onExecuteCommand: executeCommand,
-    }),
-    [currentMessages, isStreaming, modelsLoading, modelsError, models, selectedModel, handleSubmit, executeCommand]
-  );
-
-  /**
-   * Memoize right sidebar props to prevent unnecessary child re-renders
-   */
-  const rightSidebarProps = useMemo(
-    () => ({
-      count,
-      onIncrement: increment,
-      onDecrement: decrement,
-      onExport: handleExport,
-    }),
-    [count, increment, decrement, handleExport]
-  );
-
-  /**
-   * Memoize status footer props to prevent unnecessary child re-renders
-   */
-  const statusFooterProps = useMemo(
-    () => ({
-      isStreaming,
-      isWorking: false,
-      hasError: !!modelsError,
-      selectedModel,
-    }),
-    [isStreaming, modelsError, selectedModel]
-  );
-
-  // ========================================
-  // Memoized Callbacks - Event Handlers
-  // ========================================
-
-  /**
-   * Toggle settings modal
-   */
   const handleToggleSettings = useCallback(() => {
     setIsSettingsOpen((prev) => !prev);
   }, []);
 
-  /**
-   * Close settings modal
-   */
   const handleCloseSettings = useCallback(() => {
     setIsSettingsOpen(false);
   }, []);
 
-  /**
-   * Toggle swarm mode in settings
-   */
   const handleToggleSwarm = useCallback(() => {
     updateSettings({ useSwarm: !settings.useSwarm });
   }, [updateSettings, settings.useSwarm]);
 
-  /**
-   * Clear chat history with confirmation
-   */
   const handleClearHistory = useCallback(() => {
     if (confirm('Wyczyścić historię czatu?')) {
       clearHistory();
     }
   }, [clearHistory]);
 
-  /**
-   * Toggle theme - delegates to custom hook
-   */
   const handleToggleTheme = useCallback(() => {
     toggleTheme();
   }, [toggleTheme]);
 
-  /**
-   * Execute system command with bridge approval check
-   */
   const executeCommand = useCallback(
     async (cmd: string) => {
       try {
@@ -318,9 +143,6 @@ function App() {
     [addMessage, updateLastMessage]
   );
 
-  /**
-   * Handle chat submission - sends message to Swarm agent
-   */
   const handleSubmit = useCallback(
     async (userPrompt: string, attachedImage: string | null) => {
       let displayContent = userPrompt;
@@ -333,7 +155,6 @@ function App() {
 
       setIsStreaming(true);
 
-      // SWARM MODE
       try {
         updateLastMessage(`${STATUS.SWARM_INIT}\n\n`);
         await invoke(TAURI_COMMANDS.SPAWN_SWARM_AGENT, { objective: userPrompt });
@@ -345,20 +166,15 @@ function App() {
     [addMessage, updateLastMessage]
   );
 
-  /**
-   * Export current session to markdown file
-   * Uses memoized session and messages to avoid recalculation
-   */
   const handleExport = useCallback(() => {
     if (!currentSessionId) return;
 
-    // Use memoized values to avoid recalculation
-    const messages = currentSessionMessages;
-    const session = currentSession;
+    const messages = chatHistory[currentSessionId] || [];
+    const session = sessions.find((s) => s.id === currentSessionId);
 
     const content = messages
       .map(
-        (m) =>
+        (m: { role: string; content: string; timestamp: number }) =>
           `### ${m.role.toUpperCase()} [${new Date(m.timestamp).toLocaleString()}]\n${m.content}\n`
       )
       .join('\n---\n');
@@ -367,12 +183,109 @@ function App() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `session-${session?.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.md`;
+    a.download = `session-${session?.title.replace(/[^a-z0-9]/gi, '_').toLowerCase() || 'export'}.md`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-  }, [currentSessionId, currentSession, currentSessionMessages]);
+  }, [currentSessionId, sessions, chatHistory]);
+
+  // ========================================
+  // Effects (now callbacks are defined)
+  // ========================================
+
+  // Auto-select first model
+  useEffect(() => {
+    if (models.length > 0 && !selectedModel) {
+      setSelectedModel(models[0]);
+    }
+  }, [models, selectedModel]);
+
+  // Open Live Preview Window on boot
+  useEffect(() => {
+    const openPreview = async () => {
+      const livePreview = await WebviewWindow.getByLabel('live-preview');
+      if (livePreview) {
+        livePreview.show();
+      }
+    };
+    openPreview();
+  }, []);
+
+  // Agentic Tool Execution Detection
+  useEffect(() => {
+    if (isStreaming || currentMessages.length === 0) return;
+
+    const lastMsg = currentMessages[currentMessages.length - 1];
+    if (lastMsg.role === 'assistant') {
+      const match = lastMsg.content.match(COMMAND_PATTERNS.EXECUTE);
+      if (match) {
+        executeCommand(match[1]);
+      }
+    }
+  }, [currentMessages, isStreaming, executeCommand]);
+
+  // ========================================
+  // Memoized Values
+  // ========================================
+
+  const logoSrc = useMemo(() => (isDark ? '/logodark.webp' : '/logolight.webp'), [isDark]);
+  const headerSpanClass = useMemo(() => (isDark ? 'text-white' : 'text-gray-800'), [isDark]);
+
+  const statusBadgeState = useMemo(() => {
+    if (modelsError) {
+      return { className: 'status-pending', text: STATUS.API_ERROR };
+    }
+    if (settings.geminiApiKey) {
+      return { className: 'status-approved', text: STATUS.GEMINI_READY };
+    }
+    return { className: 'status-pending', text: STATUS.NO_API_KEY };
+  }, [modelsError, settings.geminiApiKey]);
+
+  const swarmButtonAttrs = useMemo(() => ({
+    className: `p-2 rounded-full transition-colors ${
+      settings.useSwarm
+        ? 'bg-[var(--matrix-accent)] text-black shadow-[0_0_10px_rgba(0,255,65,0.5)]'
+        : 'hover:bg-[var(--matrix-border)] text-[var(--matrix-text-dim)]'
+    }`,
+    title: settings.useSwarm ? 'Tryb Swarm Aktywny (Wolf Swarm)' : 'Aktywuj Tryb Swarm',
+    filled: settings.useSwarm,
+  }), [settings.useSwarm]);
+
+  const sessionSidebarProps = useMemo(() => ({
+    sessions,
+    currentSessionId,
+    onCreateSession: createSession,
+    onSelectSession: selectSession,
+    onDeleteSession: deleteSession,
+    onUpdateTitle: updateSessionTitle,
+  }), [sessions, currentSessionId, createSession, selectSession, deleteSession, updateSessionTitle]);
+
+  const chatContainerProps = useMemo(() => ({
+    messages: currentMessages,
+    isStreaming,
+    modelsLoading,
+    modelsError,
+    models,
+    selectedModel,
+    onSelectModel: setSelectedModel,
+    onSubmit: handleSubmit,
+    onExecuteCommand: executeCommand,
+  }), [currentMessages, isStreaming, modelsLoading, modelsError, models, selectedModel, handleSubmit, executeCommand]);
+
+  const rightSidebarProps = useMemo(() => ({
+    count,
+    onIncrement: increment,
+    onDecrement: decrement,
+    onExport: handleExport,
+  }), [count, increment, decrement, handleExport]);
+
+  const statusFooterProps = useMemo(() => ({
+    isStreaming,
+    isWorking: false,
+    hasError: !!modelsError,
+    selectedModel,
+  }), [isStreaming, modelsError, selectedModel]);
 
   // ========================================
   // Render
@@ -396,48 +309,26 @@ function App() {
         </div>
 
         <div className="flex gap-3 items-center">
-          {/* Swarm Toggle */}
-          <button
-            onClick={handleToggleSwarm}
-            className={swarmButtonAttrs.className}
-            title={swarmButtonAttrs.title}
-          >
+          <button onClick={handleToggleSwarm} className={swarmButtonAttrs.className} title={swarmButtonAttrs.title}>
             <Zap size={20} fill={swarmButtonAttrs.filled ? 'currentColor' : 'none'} />
           </button>
 
-          {/* Clear Chat */}
-          <button
-            onClick={handleClearHistory}
-            className="p-2 rounded-full hover:bg-[var(--matrix-border)] transition-colors text-[var(--matrix-accent)]"
-            title="Wyczyść Czat"
-          >
+          <button onClick={handleClearHistory} className="p-2 rounded-full hover:bg-[var(--matrix-border)] transition-colors text-[var(--matrix-accent)]" title="Wyczyść Czat">
             <Eraser size={20} />
           </button>
 
-          {/* Settings */}
-          <button
-            onClick={handleToggleSettings}
-            className="p-2 rounded-full hover:bg-[var(--matrix-border)] transition-colors text-[var(--matrix-accent)]"
-            title="Ustawienia"
-          >
+          <button onClick={handleToggleSettings} className="p-2 rounded-full hover:bg-[var(--matrix-border)] transition-colors text-[var(--matrix-accent)]" title="Ustawienia">
             <Settings size={20} />
           </button>
 
-          {/* Provider Badge */}
           <div className="flex bg-black/20 rounded-full px-3 py-1 border border-[var(--matrix-border)]">
             <span className="text-xs text-[var(--matrix-accent)] font-bold">Gemini AI</span>
           </div>
 
-          {/* Theme Toggle */}
-          <button
-            onClick={handleToggleTheme}
-            className="p-2 rounded-full hover:bg-[var(--matrix-border)] transition-colors text-[var(--matrix-accent)]"
-            title="Toggle Theme"
-          >
+          <button onClick={handleToggleTheme} className="p-2 rounded-full hover:bg-[var(--matrix-border)] transition-colors text-[var(--matrix-accent)]" title="Toggle Theme">
             {isDark ? <Sun size={20} /> : <Moon size={20} />}
           </button>
 
-          {/* Status Badge */}
           <span className={`status-badge flex items-center gap-1 ${statusBadgeState.className}`}>
             <Server size={12} />
             {statusBadgeState.text}
@@ -448,9 +339,7 @@ function App() {
       {/* MAIN CONTENT GRID */}
       <div className="flex-1 grid grid-cols-1 md:grid-cols-4 gap-4 overflow-hidden min-h-0">
         <SessionSidebar {...sessionSidebarProps} />
-
         <ChatContainer {...chatContainerProps} />
-
         <RightSidebar {...rightSidebarProps} />
       </div>
 

@@ -17,6 +17,8 @@
 export { MessageList, default as MessageListDefault } from './MessageList';
 export type { MessageListProps } from './MessageList';
 
+export { ChatMessageContextMenu } from './ChatMessageContextMenu';
+
 export {
   MessageSkeleton,
   MessageStreamSkeleton,

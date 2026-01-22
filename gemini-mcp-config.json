@@ -1,0 +1,189 @@
+﻿{
+    "mcpServers":  {
+                       "git":  {
+                                   "command":  "cmd",
+                                   "args":  [
+                                                "/c",
+                                                "npx",
+                                                "-y",
+                                                "@anthropic-ai/mcp-server-git"
+                                            ],
+                                   "env":  {
+                                               "GIT_DEFAULT_PATH":  "C:/Users/BIURODOM/Desktop/GeminiCLI"
+                                           }
+                               },
+                       "gitlab":  {
+                                      "type":  "http",
+                                      "url":  "https://gitlab.com/api/v4/mcp"
+                                  },
+                       "everything-search":  {
+                                                 "command":  "cmd",
+                                                 "args":  [
+                                                              "/c",
+                                                              "npx",
+                                                              "-y",
+                                                              "@anthropic-ai/mcp-server-everything"
+                                                          ],
+                                                 "env":  {
+                                                             "EVERYTHING_PATH":  "C:/Program Files/Everything/Everything.exe"
+                                                         }
+                                             },
+                       "time":  {
+                                    "command":  "cmd",
+                                    "args":  [
+                                                 "/c",
+                                                 "npx",
+                                                 "-y",
+                                                 "@modelcontextprotocol/server-time"
+                                             ]
+                                },
+                       "memory":  {
+                                      "command":  "C:\\Program Files\\nodejs\\node.exe",
+                                      "args":  [
+                                                   "C:\\Users\\BIURODOM\\Desktop\\GeminiCLI\\mcp\\node_modules\\@modelcontextprotocol\\server-memory\\dist\\index.js"
+                                               ]
+                                  },
+                       "asana":  {
+                                     "type":  "sse",
+                                     "url":  "https://mcp.asana.com/sse"
+                                 },
+                       "filesystem":  {
+                                          "command":  "C:\\Program Files\\nodejs\\node.exe",
+                                          "args":  [
+                                                       "C:\\Users\\BIURODOM\\Desktop\\GeminiCLI\\mcp\\node_modules\\@modelcontextprotocol\\server-filesystem\\dist\\index.js",
+                                                       "C:/Users/BIURODOM/Desktop",
+                                                       "C:/Users/BIURODOM/Documents",
+                                                       "C:/Users/BIURODOM/Downloads"
+                                                   ]
+                                      },
+                       "puppeteer":  {
+                                         "command":  "cmd",
+                                         "args":  [
+                                                      "/c",
+                                                      "npx",
+                                                      "-y",
+                                                      "@anthropic-ai/mcp-server-puppeteer"
+                                                  ]
+                                     },
+                       "slack":  {
+                                     "type":  "sse",
+                                     "url":  "https://mcp.slack.com/sse"
+                                 },
+                       "stripe":  {
+                                      "type":  "http",
+                                      "url":  "https://mcp.stripe.com"
+                                  },
+                       "desktop-commander":  {
+                                                 "command":  "cmd",
+                                                 "args":  [
+                                                              "/c",
+                                                              "npx",
+                                                              "-y",
+                                                              "@wonderwhy-er/desktop-commander"
+                                                          ]
+                                             },
+                       "brave-search":  {
+                                            "command":  "cmd",
+                                            "args":  [
+                                                         "/c",
+                                                         "npx",
+                                                         "-y",
+                                                         "@anthropic-ai/mcp-server-brave"
+                                                     ],
+                                            "env":  {
+                                                        "BRAVE_API_KEY":  "BSAXJ2S-GwXLGx8yHnaMJ2cX1w51DRi"
+                                                    }
+                                        },
+                       "fetch":  {
+                                     "command":  "cmd",
+                                     "args":  [
+                                                  "/c",
+                                                  "npx",
+                                                  "-y",
+                                                  "@modelcontextprotocol/server-fetch"
+                                              ]
+                                 },
+                       "ollama":  {
+                                      "command":  "cmd",
+                                      "args":  [
+                                                   "/c",
+                                                   "npx",
+                                                   "-y",
+                                                   "ollama-mcp"
+                                               ],
+                                      "env":  {
+                                                  "OLLAMA_HOST":  "http://127.0.0.1:11434"
+                                              }
+                                  },
+                       "github":  {
+                                      "type":  "http",
+                                      "url":  "https://api.githubcopilot.com/mcp/",
+                                      "headers":  {
+                                                      "Authorization":  "Bearer ${GITHUB_PERSONAL_ACCESS_TOKEN}"
+                                                  }
+                                  },
+                       "context7":  {
+                                        "command":  "cmd",
+                                        "args":  [
+                                                     "/c",
+                                                     "npx",
+                                                     "-y",
+                                                     "@upstash/context7-mcp"
+                                                 ]
+                                    },
+                       "serena":  {
+                                      "command":  "cmd",
+                                      "args":  [
+                                                   "/c",
+                                                   "uvx",
+                                                   "--from",
+                                                   "git+https://github.com/oraios/serena",
+                                                   "serena",
+                                                   "start-mcp-server"
+                                               ]
+                                  },
+                       "firebase":  {
+                                        "command":  "cmd",
+                                        "args":  [
+                                                     "/c",
+                                                     "npx",
+                                                     "-y",
+                                                     "firebase-tools@latest",
+                                                     "mcp"
+                                                 ]
+                                    },
+                       "greptile":  {
+                                        "type":  "http",
+                                        "url":  "https://api.greptile.com/mcp",
+                                        "headers":  {
+                                                        "Authorization":  "Bearer ${GREPTILE_API_KEY}"
+                                                    }
+                                    },
+                       "sequential-thinking":  {
+                                                   "command":  "cmd",
+                                                   "args":  [
+                                                                "/c",
+                                                                "npx",
+                                                                "-y",
+                                                                "@modelcontextprotocol/server-sequential-thinking"
+                                                            ]
+                                               },
+                       "linear":  {
+                                      "type":  "http",
+                                      "url":  "https://mcp.linear.app/mcp"
+                                  },
+                       "playwright":  {
+                                          "command":  "cmd",
+                                          "args":  [
+                                                       "/c",
+                                                       "npx",
+                                                       "-y",
+                                                       "@playwright/mcp@latest"
+                                                   ]
+                                      },
+                       "supabase":  {
+                                        "type":  "http",
+                                        "url":  "https://mcp.supabase.com/mcp"
+                                    }
+                   }
+}

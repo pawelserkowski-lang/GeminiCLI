@@ -9,7 +9,7 @@ import { useState, useCallback, memo } from 'react';
 import type { Message } from '../types';
 
 // Sub-components
-import { MessageList, ChatInput, DragDropZone } from './chat';
+import { MessageList, ChatInput, DragDropZone, ChatMessageContextMenu } from './chat';
 
 // ============================================================================
 // TYPES
@@ -45,6 +45,11 @@ export const ChatContainer = memo<ChatContainerProps>(
   }) => {
     const [pendingImage, setPendingImage] = useState<string | null>(null);
     const [textContext, setTextContext] = useState<string>('');
+    const [contextMenu, setContextMenu] = useState<{
+      x: number;
+      y: number;
+      message: Message;
+    } | null>(null);
 
     // Handle image drop
     const handleImageDrop = useCallback((base64: string) => {
@@ -75,17 +80,51 @@ export const ChatContainer = memo<ChatContainerProps>(
       setPendingImage(null);
     }, []);
 
+    // Context Menu Handlers
+    const handleContextMenu = useCallback((e: React.MouseEvent, message: Message) => {
+      e.preventDefault();
+      setContextMenu({
+        x: e.clientX,
+        y: e.clientY,
+        message,
+      });
+    }, []);
+
+    const handleCloseContextMenu = useCallback(() => {
+      setContextMenu(null);
+    }, []);
+
+    const handleCopyMessage = useCallback(() => {
+      if (contextMenu) {
+        navigator.clipboard.writeText(contextMenu.message.content);
+        handleCloseContextMenu();
+      }
+    }, [contextMenu, handleCloseContextMenu]);
+
     return (
       <DragDropZone onImageDrop={handleImageDrop} onTextDrop={handleTextDrop}>
-        <div className="glass-panel flex-1 rounded-lg border-[var(--matrix-border)] flex flex-col min-h-0">
+        <div className="glass-panel flex-1 rounded-lg border-[var(--matrix-border)] flex flex-col min-h-0 relative">
           {/* Messages List */}
           <div className="flex-1 min-h-0">
             <MessageList
               messages={messages}
               isStreaming={isStreaming}
               onExecuteCommand={onExecuteCommand}
+              onContextMenu={handleContextMenu}
             />
           </div>
+
+          {/* Context Menu */}
+          {contextMenu && (
+            <ChatMessageContextMenu
+              x={contextMenu.x}
+              y={contextMenu.y}
+              isUser={contextMenu.message.role === 'user'}
+              onClose={handleCloseContextMenu}
+              onCopy={handleCopyMessage}
+              // Add onDelete and onRegenerate when supported by store
+            />
+          )}
 
           {/* Input Area */}
           <ChatInput

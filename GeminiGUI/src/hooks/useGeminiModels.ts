@@ -44,7 +44,7 @@ export const useGeminiModels = (): UseGeminiModelsReturn => {
       // No API key - return fallback models
       if (!geminiApiKey) {
         console.warn('[useGeminiModels] No API key - using fallback models');
-        return FALLBACK_MODELS.gemini;
+        return [...FALLBACK_MODELS.gemini];
       }
 
       try {
@@ -59,10 +59,10 @@ export const useGeminiModels = (): UseGeminiModelsReturn => {
           return fetchedModels;
         }
 
-        return FALLBACK_MODELS.gemini;
+        return [...FALLBACK_MODELS.gemini];
       } catch (error) {
         console.error('[useGeminiModels] Failed to fetch:', error);
-        return FALLBACK_MODELS.gemini;
+        return [...FALLBACK_MODELS.gemini];
       }
     },
     enabled: true,
@@ -79,7 +79,7 @@ export const useGeminiModels = (): UseGeminiModelsReturn => {
   }, [geminiApiKey, refetch]);
 
   return {
-    models: models ?? FALLBACK_MODELS.gemini,
+    models: models ?? [...FALLBACK_MODELS.gemini],
     isLoading,
     error: error as Error | null,
     refetch,

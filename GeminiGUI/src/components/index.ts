@@ -3,88 +3,25 @@
  * @module components
  *
  * Main component exports for the application.
- * All components are centrally exported from this file.
- *
- * Usage:
- *   import { ChatContainer, Button } from '@/components';
- *   import type { ChatContainerProps } from '@/components';
  */
 
-// ============================================================================
-// MAIN LAYOUT COMPONENTS
-// ============================================================================
+// Main Layout Components
+export { ChatContainer } from './ChatContainer';
+export { SessionSidebar } from './SessionSidebar';
+export { RightSidebar } from './RightSidebar';
+export { SettingsModal } from './SettingsModal';
+export { StatusFooter } from './StatusFooter';
 
-export { ChatContainer, default as ChatContainerDefault } from './ChatContainer';
-export type { ChatContainerProps } from './ChatContainer';
+// Feature Components
+export { MemoryPanel } from './MemoryPanel';
+export { BridgePanel } from './BridgePanel';
 
-export { SessionSidebar, default as SessionSidebarDefault } from './SessionSidebar';
-export type { SessionSidebarProps } from './SessionSidebar';
+// Utility Components
+export { CodeBlock } from './CodeBlock';
+export { ErrorBoundary } from './ErrorBoundary';
 
-export { RightSidebar, default as RightSidebarDefault } from './RightSidebar';
+// UI Components
+export { Button } from './ui';
 
-export { SettingsModal, default as SettingsModalDefault } from './SettingsModal';
-export type { SettingsModalProps } from './SettingsModal';
-
-export { StatusFooter, default as StatusFooterDefault } from './StatusFooter';
-export type { StatusFooterProps } from './StatusFooter';
-
-// ============================================================================
-// FEATURE COMPONENTS
-// ============================================================================
-
-export { MemoryPanel, default as MemoryPanelDefault } from './MemoryPanel';
-export { BridgePanel, default as BridgePanelDefault } from './BridgePanel';
-
-// ============================================================================
-// UTILITY COMPONENTS
-// ============================================================================
-
-export { CodeBlock, default as CodeBlockDefault } from './CodeBlock';
-
-export { ErrorBoundary, default as ErrorBoundaryDefault } from './ErrorBoundary';
-export type { ErrorBoundaryProps } from './ErrorBoundary';
-
-// ============================================================================
-// RE-EXPORT ALL UI COMPONENTS
-// ============================================================================
-
-export {
-  Button,
-  ButtonDefault,
-  Skeleton,
-  SkeletonText,
-  SkeletonAvatar,
-  SkeletonCard,
-  SkeletonMessage,
-} from './ui';
-
-export type {
-  ButtonProps,
-  SkeletonBaseProps,
-  SkeletonTextProps,
-  SkeletonAvatarProps,
-  SkeletonCardProps,
-  SkeletonMessageProps,
-} from './ui';
-
-// ============================================================================
-// RE-EXPORT ALL CHAT COMPONENTS
-// ============================================================================
-
-export {
-  MessageList,
-  MessageListDefault,
-  ChatInput,
-  ChatInputDefault,
-  ModelSelector,
-  ModelSelectorDefault,
-  DragDropZone,
-  DragDropZoneDefault,
-} from './chat';
-
-export type {
-  MessageListProps,
-  ChatInputProps,
-  ModelSelectorProps,
-  DragDropZoneProps,
-} from './chat';
+// Chat Components
+export { MessageList, ChatInput, ModelSelector, DragDropZone } from './chat';

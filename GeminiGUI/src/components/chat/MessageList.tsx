@@ -23,6 +23,7 @@ export interface MessageListProps {
   messages: Message[];
   isStreaming: boolean;
   onExecuteCommand: (cmd: string) => void;
+  onContextMenu: (e: React.MouseEvent, message: Message) => void;
 }
 
 // ============================================================================
@@ -34,10 +35,11 @@ interface MessageItemProps {
   isLast: boolean;
   isStreaming: boolean;
   onExecuteCommand: (cmd: string) => void;
+  onContextMenu: (e: React.MouseEvent, message: Message) => void;
 }
 
 const MessageItem = memo<MessageItemProps>(
-  ({ message, isLast, isStreaming, onExecuteCommand }) => {
+  ({ message, isLast, isStreaming, onExecuteCommand, onContextMenu }) => {
     const isUser = message.role === 'user';
     const isSystem = message.role === 'system';
 
@@ -47,6 +49,7 @@ const MessageItem = memo<MessageItemProps>(
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
         className={`flex ${isUser ? 'justify-end' : 'justify-start'} py-2 px-4`}
+        onContextMenu={(e) => onContextMenu(e, message)}
       >
         <div
           className={`max-w-[95%] p-3 rounded-lg text-sm overflow-hidden ${
@@ -118,7 +121,7 @@ EmptyState.displayName = 'EmptyState';
 // ============================================================================
 
 export const MessageList = memo<MessageListProps>(
-  ({ messages, isStreaming, onExecuteCommand }) => {
+  ({ messages, isStreaming, onExecuteCommand, onContextMenu }) => {
     const virtuosoRef = useRef<VirtuosoHandle>(null);
 
     if (messages.length === 0) {
@@ -136,6 +139,7 @@ export const MessageList = memo<MessageListProps>(
             isLast={index === messages.length - 1}
             isStreaming={isStreaming}
             onExecuteCommand={onExecuteCommand}
+            onContextMenu={onContextMenu}
           />
         )}
         followOutput="auto"

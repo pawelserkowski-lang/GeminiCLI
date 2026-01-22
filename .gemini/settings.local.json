@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__*",
+      "Bash",
+      "Read(*)",
+      "Write(*)",
+      "Edit(*)",
+      "Glob(*)",
+      "Grep(*)",
+      "WebFetch(domain:*)"
+    ],
+    "deny": []
+  },
+  "enableAllProjectMcpServers": true,
+  "theme": "matrix",
+  "locale": "pl"
+}

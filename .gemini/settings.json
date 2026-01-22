@@ -1,0 +1,91 @@
+{
+  "security": {
+    "auth": {
+      "selectedType": "oauth-personal"
+    }
+  },
+  "mcpServers": {
+    "ollama": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "ollama-mcp"],
+      "env": {
+        "OLLAMA_HOST": "http://localhost:11434"
+      },
+      "timeout": 120000
+    },
+    "serena": {
+      "command": "cmd",
+      "args": ["/c", "uvx", "--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-server", "--project-from-cwd"],
+      "timeout": 120000
+    },
+    "desktop-commander": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@wonderwhy-er/desktop-commander"],
+      "env": {
+        "DC_SHELL": "powershell"
+      },
+      "timeout": 60000
+    },
+    "playwright": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@playwright/mcp@latest"],
+      "timeout": 60000
+    },
+    "filesystem": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@modelcontextprotocol/server-filesystem", ".", "../"],
+      "timeout": 60000
+    },
+    "memory": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@modelcontextprotocol/server-memory"],
+      "timeout": 60000
+    },
+    "sequential-thinking": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "timeout": 60000
+    },
+    "context7": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@upstash/context7-mcp"],
+      "timeout": 60000
+    },
+    "git": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@anthropic-ai/mcp-server-git"],
+      "env": {
+        "GIT_DEFAULT_PATH": "."
+      },
+      "timeout": 60000
+    }
+  },
+  "mcp": {
+    "allowed": ["ollama", "serena", "desktop-commander", "playwright", "filesystem", "memory", "sequential-thinking", "context7", "git"],
+    "parallelToolCalls": true
+  },
+  "model": {
+    "name": "gemini-2.5-pro",
+    "autoSelect": false,
+    "preferences": {
+      "code": "gemini-2.5-pro",
+      "simple": "gemini-2.5-flash",
+      "fast": "gemini-2.0-flash-lite",
+      "default": "gemini-2.5-pro"
+    },
+    "cachePrompts": true,
+    "cacheTtl": 3600
+  },
+  "general": {
+    "previewFeatures": true,
+    "confirmTools": false,
+    "maxRetries": 3,
+    "retryDelay": 1000,
+    "fallbacks": {
+      "google": ["gemini-2.5-pro", "gemini-2.5-flash", "gemini-2.0-flash-lite"]
+    }
+  },
+  "context": {
+    "fileName": ["GEMINI.md"]
+  }
+}
