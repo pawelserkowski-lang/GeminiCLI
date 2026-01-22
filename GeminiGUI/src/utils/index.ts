@@ -1,0 +1,39 @@
+/**
+ * GeminiGUI - Utilities Barrel Export
+ * @module utils
+ *
+ * Centralized utilities and helper functions for validation,
+ * sanitization, and data transformation.
+ *
+ * Usage:
+ *   import { isValidUrl, sanitizeContent } from '@/utils';
+ */
+
+// ============================================================================
+// VALIDATION FUNCTIONS
+// ============================================================================
+
+export {
+  isValidUrl,
+  isLocalhostUrl,
+  isValidApiKey,
+  isGeminiApiKey,
+  isValidSessionId,
+  isValidModelName,
+  isValidMessageRole,
+  isValidProvider,
+  isValidTheme,
+} from './validators';
+
+// ============================================================================
+// SANITIZATION & SAFETY FUNCTIONS
+// ============================================================================
+
+export {
+  sanitizeContent,
+  sanitizeTitle,
+  escapeForShell,
+  containsDangerousPatterns,
+  isBlockedPath,
+  hasBlockedExtension,
+} from './validators';

@@ -1,0 +1,368 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+@import "tailwindcss";
+
+/* ============================================
+   TAILWIND v4 THEME CONFIGURATION
+   ============================================ */
+@theme {
+  /* Witcher-inspired color palette */
+  --color-witcher-silver: #c0c0c0;
+  --color-witcher-gold: #ffd700;
+  --color-witcher-blood: #8b0000;
+  --color-witcher-dark: #1a1a2e;
+  --color-witcher-steel: #4a5568;
+
+  /* Matrix emerald palette */
+  --color-matrix-bg: #0a1f0a;
+  --color-matrix-bg-dark: #001a00;
+  --color-matrix-accent: #00ff41;
+  --color-matrix-accent-dim: #00cc33;
+  --color-matrix-text: #c0ffc0;
+  --color-matrix-text-dim: #80c080;
+  --color-matrix-border: #1a3a1a;
+
+  /* Fonts */
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+
+  /* Animations */
+  --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-glow: glow 2s ease-in-out infinite alternate;
+
+  /* Shadows */
+  --shadow-glow: 0 0 18px rgba(0, 255, 65, 0.3), 0 0 36px rgba(0, 255, 65, 0.15);
+  --shadow-glow-sm: 0 0 10px rgba(0, 255, 65, 0.2);
+  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes glow {
+  0% { box-shadow: 0 0 5px #fbbf24; }
+  100% { box-shadow: 0 0 20px #fbbf24; }
+}
+
+/* ============================================
+   ROOT VARIABLES (DARK / DEFAULT)
+   ============================================ */
+:root {
+  --background: 10 31 10;
+  --foreground: 220 252 231;
+  --accent: 0 255 65;
+  --glass: 0 255 65;
+  color-scheme: dark;
+
+  --matrix-bg-primary: #0a1f0a;
+  --matrix-bg-secondary: #001a00;
+  --matrix-accent: #00ff41;
+  --matrix-text: #c0ffc0;
+  --matrix-text-dim: #80c080;
+  --matrix-glass-bg: rgba(0, 31, 0, 0.85);
+  --matrix-panel-bg: rgba(10, 20, 10, 0.8);
+  --matrix-border: rgba(0, 255, 65, 0.15);
+  --matrix-input-bg: rgba(0, 0, 0, 0.5);
+}
+
+/* ============================================
+   LIGHT THEME OVERRIDES
+   ============================================ */
+[data-theme='light'] {
+  --background: 227 255 235;
+  --foreground: 5 46 22;
+  --accent: 0 153 51;
+  --glass: 0 153 51;
+  color-scheme: light;
+
+  --matrix-bg-primary: #f0fdf4;
+  --matrix-bg-secondary: #ffffff;
+  --matrix-accent: #059669;
+  --matrix-text: #064e3b;
+  --matrix-text-dim: #34d399;
+  --matrix-glass-bg: rgba(255, 255, 255, 0.7);
+  --matrix-panel-bg: rgba(255, 255, 255, 0.6);
+  --matrix-border: rgba(5, 150, 105, 0.2);
+  --matrix-input-bg: rgba(255, 255, 255, 0.5);
+}
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+body {
+  @apply antialiased;
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-feature-settings: "rlig" 1, "calt" 1;
+  background-color: rgb(var(--background));
+  color: var(--matrix-text);
+  background-image:
+    radial-gradient(circle at top, rgba(0, 255, 65, 0.12), transparent 45%),
+    linear-gradient(135deg, #0a1f0a 0%, #001a00 100%);
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  overflow: hidden;
+  height: 100vh;
+  margin: 0;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+[data-theme='light'] body {
+  background-image:
+    radial-gradient(circle at top, rgba(5, 150, 105, 0.1), transparent 45%),
+    linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================
+   CUSTOM SCROLLBAR
+   ============================================ */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-emerald-950;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-emerald-800 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-emerald-700;
+}
+
+[data-theme='light'] ::-webkit-scrollbar-track {
+  @apply bg-emerald-100;
+}
+
+[data-theme='light'] ::-webkit-scrollbar-thumb {
+  @apply bg-emerald-300;
+}
+
+[data-theme='light'] ::-webkit-scrollbar-thumb:hover {
+  @apply bg-emerald-400;
+}
+
+/* Selection */
+::selection {
+  @apply bg-emerald-400/30 text-emerald-50;
+}
+
+[data-theme='light'] ::selection {
+  @apply bg-emerald-200 text-emerald-900;
+}
+
+/* ============================================
+   GLASS MORPHISM COMPONENTS
+   ============================================ */
+.glass {
+  @apply bg-emerald-900/30 backdrop-blur-xl border border-emerald-400/20;
+}
+
+.glass-panel {
+  background: var(--matrix-panel-bg);
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  border: 1px solid var(--matrix-border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+/* ============================================
+   GLOW EFFECTS
+   ============================================ */
+.glow-amber {
+  box-shadow: 0 0 18px rgba(0, 255, 65, 0.3),
+              0 0 36px rgba(0, 255, 65, 0.15);
+}
+
+.glow-blue {
+  box-shadow: 0 0 18px rgba(52, 211, 153, 0.3),
+              0 0 36px rgba(52, 211, 153, 0.15);
+}
+
+/* ============================================
+   TEXT GRADIENT
+   ============================================ */
+.text-gradient {
+  @apply bg-gradient-to-r from-emerald-300 via-emerald-400 to-green-500 bg-clip-text text-transparent;
+}
+
+/* ============================================
+   BUTTON VARIANTS
+   ============================================ */
+.btn-primary {
+  @apply px-4 py-2 rounded-lg bg-emerald-400 hover:bg-emerald-300
+         text-emerald-950 font-medium transition-colors cursor-pointer;
+}
+
+.btn-secondary {
+  @apply px-4 py-2 rounded-lg bg-emerald-950/60 hover:bg-emerald-900/70
+         text-emerald-100 font-medium transition-colors cursor-pointer;
+}
+
+.glass-button {
+  background: color-mix(in srgb, var(--matrix-accent) 10%, transparent);
+  backdrop-filter: blur(4px);
+  border: 1px solid color-mix(in srgb, var(--matrix-accent) 30%, transparent);
+  color: var(--matrix-accent);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.glass-button:hover {
+  background: color-mix(in srgb, var(--matrix-accent) 20%, transparent);
+  box-shadow: 0 0 15px color-mix(in srgb, var(--matrix-accent) 20%, transparent);
+}
+
+.glass-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* ============================================
+   INPUT STYLES
+   ============================================ */
+.input-base {
+  @apply w-full px-4 py-3 rounded-xl bg-emerald-950/60 border border-emerald-400/30
+         text-emerald-50 placeholder:text-emerald-300/60
+         focus:outline-none focus:ring-2 focus:ring-emerald-400/50
+         focus:border-emerald-300/70 transition-all;
+}
+
+.matrix-input {
+  background: var(--matrix-input-bg);
+  border: 1px solid color-mix(in srgb, var(--matrix-accent) 30%, transparent);
+  color: var(--matrix-text);
+}
+
+.matrix-input:focus {
+  border-color: var(--matrix-accent);
+  outline: none;
+}
+
+/* ============================================
+   STATUS BADGES
+   ============================================ */
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.status-pending {
+  background: rgba(255, 165, 0, 0.2);
+  color: orange;
+  border: 1px solid rgba(255, 165, 0, 0.4);
+}
+
+.status-approved {
+  background: color-mix(in srgb, var(--matrix-accent) 20%, transparent);
+  color: var(--matrix-accent);
+  border: 1px solid color-mix(in srgb, var(--matrix-accent) 40%, transparent);
+}
+
+/* ============================================
+   MATRIX BACKGROUND
+   ============================================ */
+.matrix-bg {
+  background-color: var(--matrix-bg-primary);
+  background-image:
+    radial-gradient(circle at top, rgba(0, 255, 65, 0.08), transparent 50%),
+    linear-gradient(180deg, var(--matrix-bg-primary) 0%, var(--matrix-bg-secondary) 100%);
+  transition: background-image 0.5s ease-in-out;
+}
+
+[data-theme='light'] .matrix-bg {
+  background-image:
+    radial-gradient(circle at top, rgba(5, 150, 105, 0.08), transparent 50%),
+    linear-gradient(180deg, var(--matrix-bg-primary) 0%, var(--matrix-bg-secondary) 100%);
+}
+
+/* ============================================
+   MARKDOWN STYLES
+   ============================================ */
+.markdown-body p { margin-bottom: 0.5em; }
+.markdown-body p:last-child { margin-bottom: 0; }
+.markdown-body pre {
+  background: rgba(0,0,0,0.3);
+  padding: 0.5em;
+  border-radius: 4px;
+  overflow-x: auto;
+  border: 1px solid var(--matrix-border);
+  margin: 0.5em 0;
+}
+.markdown-body code {
+  background: rgba(0,0,0,0.2);
+  padding: 0.1em 0.3em;
+  border-radius: 2px;
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+.markdown-body pre code {
+  background: transparent;
+  padding: 0;
+}
+.markdown-body ul, .markdown-body ol { margin-left: 1.5em; margin-bottom: 0.5em; }
+.markdown-body li { margin-bottom: 0.2em; }
+.markdown-body strong { color: var(--matrix-accent); font-weight: bold; }
+.markdown-body a { color: var(--matrix-accent); text-decoration: underline; }
+.markdown-body h1, .markdown-body h2, .markdown-body h3 {
+  color: var(--matrix-text);
+  margin-top: 0.5em;
+  margin-bottom: 0.2em;
+  font-weight: bold;
+  border-bottom: 1px solid var(--matrix-border);
+}
+.markdown-body blockquote {
+  border-left: 2px solid var(--matrix-accent);
+  padding-left: 0.5em;
+  margin-left: 0;
+  font-style: italic;
+  opacity: 0.8;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+.animate-in {
+  animation: animateIn 0.3s ease-out;
+}
+
+@keyframes animateIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hide scrollbar utility */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

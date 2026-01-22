@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { useAppStore } from '../store/useAppStore';
 import { X, Save } from 'lucide-react';
 
@@ -7,7 +7,7 @@ interface SettingsModalProps {
   onClose: () => void;
 }
 
-export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }) => {
+const SettingsModalComponent: React.FC<SettingsModalProps> = ({ isOpen, onClose }) => {
   const { settings, updateSettings } = useAppStore();
   const [localSettings, setLocalSettings] = React.useState(settings);
 
@@ -25,7 +25,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
       <div className="glass-panel w-full max-w-lg p-6 border-[var(--matrix-border)] shadow-[var(--shadow-glass)] flex flex-col gap-4 relative">
-        
+
         <button onClick={onClose} className="absolute top-4 right-4 text-[var(--matrix-text-dim)] hover:text-[var(--matrix-accent)]">
           <X size={20} />
         </button>
@@ -35,10 +35,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
         </h2>
 
         <div className="flex flex-col gap-4">
-          
+
           <div className="flex flex-col gap-2">
             <label className="text-sm text-[var(--matrix-text-dim)] font-mono">Endpoint Ollama</label>
-            <input 
+            <input
               value={localSettings.ollamaEndpoint}
               onChange={(e) => setLocalSettings({...localSettings, ollamaEndpoint: e.target.value})}
               className="matrix-input p-2 rounded text-sm font-mono"
@@ -48,7 +48,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
 
           <div className="flex flex-col gap-2">
             <label className="text-sm text-[var(--matrix-text-dim)] font-mono">Klucz API Google Gemini</label>
-            <input 
+            <input
               value={localSettings.geminiApiKey}
               onChange={(e) => setLocalSettings({...localSettings, geminiApiKey: e.target.value})}
               className="matrix-input p-2 rounded text-sm font-mono"
@@ -59,7 +59,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
 
           <div className="flex flex-col gap-2">
             <label className="text-sm text-[var(--matrix-text-dim)] font-mono">Prompt Systemowy (Nadpisanie)</label>
-            <textarea 
+            <textarea
               value={localSettings.systemPrompt}
               onChange={(e) => setLocalSettings({...localSettings, systemPrompt: e.target.value})}
               className="matrix-input p-2 rounded text-sm font-mono h-40 resize-none"
@@ -70,13 +70,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
           <div className="border border-red-500/30 rounded p-3 bg-red-900/10 flex flex-col gap-3 mt-2">
              <span className="text-xs font-bold text-red-400 uppercase tracking-wider">Strefa Zagrożenia</span>
              <div className="flex gap-2">
-                <button 
+                <button
                   onClick={() => { useAppStore.getState().clearHistory(); onClose(); }}
                   className="flex-1 border border-red-500/30 hover:bg-red-500/20 text-red-300 text-xs py-2 rounded transition-colors"
                 >
                   Wyczyść Czat
                 </button>
-                <button 
+                <button
                   onClick={() => { if(confirm("Zresetować cały stan aplikacji?")) { useAppStore.getState().reset(); location.reload(); } }}
                   className="flex-1 bg-red-500/20 hover:bg-red-500/40 text-red-200 text-xs py-2 rounded transition-colors font-bold"
                 >
@@ -100,3 +100,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
     </div>
   );
 };
+
+SettingsModalComponent.displayName = 'SettingsModal';
+
+export const SettingsModal = memo(SettingsModalComponent);
