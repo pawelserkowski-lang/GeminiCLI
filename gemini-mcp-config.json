@@ -9,7 +9,7 @@
                                                 "@anthropic-ai/mcp-server-git"
                                             ],
                                    "env":  {
-                                               "GIT_DEFAULT_PATH":  "C:/Users/BIURODOM/Desktop/GeminiCLI"
+                                               "GIT_DEFAULT_PATH":  "C:\\Users\\BIURODOM\\Desktop\\GeminiHydra"
                                            }
                                },
                        "gitlab":  {
@@ -40,7 +40,7 @@
                        "memory":  {
                                       "command":  "C:\\Program Files\\nodejs\\node.exe",
                                       "args":  [
-                                                   "C:\\Users\\BIURODOM\\Desktop\\GeminiCLI\\mcp\\node_modules\\@modelcontextprotocol\\server-memory\\dist\\index.js"
+                                                   "C:\\Users\\BIURODOM\\Desktop\\GeminiHydra\\mcp\\node_modules\\@modelcontextprotocol\\server-memory\\dist\\index.js"
                                                ]
                                   },
                        "asana":  {
@@ -50,10 +50,8 @@
                        "filesystem":  {
                                           "command":  "C:\\Program Files\\nodejs\\node.exe",
                                           "args":  [
-                                                       "C:\\Users\\BIURODOM\\Desktop\\GeminiCLI\\mcp\\node_modules\\@modelcontextprotocol\\server-filesystem\\dist\\index.js",
-                                                       "C:/Users/BIURODOM/Desktop",
-                                                       "C:/Users/BIURODOM/Documents",
-                                                       "C:/Users/BIURODOM/Downloads"
+                                                       "C:\\Users\\BIURODOM\\Desktop\\GeminiHydra\\mcp\\node_modules\\@modelcontextprotocol\\server-filesystem\\dist\\index.js",
+                                                       "C:\\"
                                                    ]
                                       },
                        "puppeteer":  {
@@ -80,7 +78,10 @@
                                                               "npx",
                                                               "-y",
                                                               "@wonderwhy-er/desktop-commander"
-                                                          ]
+                                                          ],
+                                                 "env":  {
+                                                             "DC_SHELL":  "powershell"
+                                                         }
                                              },
                        "brave-search":  {
                                             "command":  "cmd",
@@ -104,12 +105,9 @@
                                               ]
                                  },
                        "ollama":  {
-                                      "command":  "cmd",
+                                      "command":  "C:\\Program Files\\nodejs\\node.exe",
                                       "args":  [
-                                                   "/c",
-                                                   "npx",
-                                                   "-y",
-                                                   "ollama-mcp"
+                                                   "C:\\Users\\BIURODOM\\Desktop\\GeminiHydra\\mcp\\node_modules\\ollama-mcp\\dist\\index.js"
                                                ],
                                       "env":  {
                                                   "OLLAMA_HOST":  "http://127.0.0.1:11434"
@@ -139,7 +137,8 @@
                                                    "--from",
                                                    "git+https://github.com/oraios/serena",
                                                    "serena",
-                                                   "start-mcp-server"
+                                                   "start-mcp-server",
+                                                   "--project-from-cwd"
                                                ]
                                   },
                        "firebase":  {
