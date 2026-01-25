@@ -3,8 +3,11 @@
 ![Version](https://img.shields.io/badge/version-0.3.0-blue)
 ![Stack](https://img.shields.io/badge/stack-PowerShell_7%2B_Tauri_2%2B_React_19-green)
 ![AI](https://img.shields.io/badge/AI-Ollama_%2B_Gemini-purple)
+![Build](https://img.shields.io/badge/build-Vite_7%2B_Tailwind_4-orange)
 
-**GeminiHydra** to zaawansowany system autonomicznych agentów AI ("Rój"), który łączy potęgę skryptów PowerShell z nowoczesnym interfejsem graficznym.
+**GeminiHydra** to zaawansowany system autonomicznych agentów AI ("Rój"), który laczy potege skryptów PowerShell z nowoczesnym interfejsem graficznym.
+
+> **Note:** GeminiGUI v0.2.0 - Interfejs graficzny z lazy loading, code splitting i kompresja Brotli/Gzip.
 
 ---
 
@@ -56,19 +59,48 @@ System składa się z 12 wyspecjalizowanych agentów, inspirowanych postaciami z
 
 ---
 
-## 🛠️ Architektura "Regis"
+## Architektura "Regis"
 
-GeminiHydra działa w oparciu o unikalną architekturę hybrydową:
+GeminiHydra dziala w oparciu o unikalna architekture hybrydowa:
 
-1.  **Warstwa Logiki (PowerShell):** `AgentSwarm.psm1` to silnik wykonawczy. Wykorzystuje `RunspacePool` do wielowątkowego wykonywania zadań przez agentów.
-2.  **Warstwa UI (Tauri + React):** Nowoczesny frontend w React 19 komunikuje się z backendem Rust, który z kolei może wywoływać logikę PowerShell lub Node.js.
-3.  **Self-Healing Loop:** Unikalna cecha Hydry. Jeśli agenci zawiodą, Dijkstra (Gemini) analizuje błędy i generuje plan naprawczy w pętli.
+1.  **Warstwa Logiki (PowerShell):** `AgentSwarm.psm1` to silnik wykonawczy. Wykorzystuje `RunspacePool` do wielowatkowego wykonywania zadan przez agentów.
+2.  **Warstwa UI (Tauri + React):** Nowoczesny frontend w React 19 komunikuje sie z backendem Rust, który z kolei moze wywolywac logike PowerShell lub Node.js.
+3.  **Self-Healing Loop:** Unikalna cecha Hydry. Jesli agenci zawioda, Dijkstra (Gemini) analizuje bledy i generuje plan naprawczy w petli.
+
+### GeminiGUI - Zaawansowane Funkcje
+
+Frontend wykorzystuje nowoczesne techniki optymalizacji wydajnosci:
+
+| Funkcja | Opis | Zródlo |
+|---------|------|--------|
+| **LazyComponents** | Lazy loading komponentów z React.lazy() i Suspense | ClaudeHydra |
+| **SuspenseFallback** | Ujednolicony loader dla wszystkich lazy komponentów | ClaudeHydra |
+| **Code Splitting** | Manualne chunki (vendor-react, vendor-markdown, etc.) | Vite 7 |
+| **Compression** | Gzip + Brotli dla produkcji (vite-plugin-compression) | Vite 7 |
+| **Terser Minification** | drop_console, drop_debugger w produkcji | Build Config |
+
+**Tech Stack GUI:**
+- React 19.1.0 + Vite 7.0.4 + Tailwind 4.1.18
+- Zustand 5.0.10 (state management)
+- Framer Motion 12.x (animations)
+- React Virtuoso (virtual scrolling)
+- Vitest + Playwright (testing)
 
 ---
 
-## 🤝 Kontrybucje
+## Wersje Komponentów
 
-Projekt jest w fazie aktywnego rozwoju. Zapoznaj się z `CONTRIBUTING.md` i dołącz do Szkoły Wilka!
+| Komponent | Wersja | Lokalizacja |
+|-----------|--------|-------------|
+| GeminiHydra (Core) | 0.3.0 | `GEMINI.md`, `ARCHITECTURE.md` |
+| GeminiGUI | 0.2.0 | `GeminiGUI/package.json` |
+| geminicli | 1.0.0 | `package.json` (root) |
+
+---
+
+## Kontrybucje
+
+Projekt jest w fazie aktywnego rozwoju. Zapoznaj sie z `CONTRIBUTING.md` i dolacz do Szkoly Wilka!
 
 **Licencja:** MIT
 **Autor:** GeminiCLI Team

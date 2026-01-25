@@ -15,10 +15,15 @@ GeminiHydra to autonomiczny system Roju Agentów (Agent Swarm) zarządzany przez
     - Rola: Mózg operacyjny. Zarządza 12 agentami, kolejką zadań, samonaprawą (Self-Healing Phase C) i komunikacją z modelami (Ollama/Gemini).
     - Agenci: Geralt, Yennefer, Triss, Jaskier, etc.
 
-2.  **GeminiGUI (Tauri + React)**
-    - Frontend: React 19 + Vite 7 + Tailwind 4.
-    - Backend: Rust (Tauri 2.0) - obsługa okien, plików i bezpieczeństwa.
-    - Rola: Interfejs użytkownika, wizualizacja czatu, pamięci i statusu.
+2.  **GeminiGUI (Tauri + React)** - v0.2.0
+    - Frontend: React 19.1 + Vite 7.0 + Tailwind 4.1 + Zustand 5.0.
+    - Backend: Rust (Tauri 2.0) - obsluga okien, plików i bezpieczenstwa.
+    - Rola: Interfejs uzytkownika, wizualizacja czatu, pamieci i statusu.
+    - **Optymalizacje** (Cross-pollination z ClaudeHydra):
+      - `LazyComponents.tsx` - Lazy loading ciezkich komponentów (SettingsModal, MemoryPanel, BridgePanel).
+      - `SuspenseFallback.tsx` - Ujednolicony loader z animacja Loader2.
+      - Code splitting z manualnymi chunkami Vite (vendor-react, vendor-markdown, etc.).
+      - Kompresja produkcyjna: Gzip + Brotli (vite-plugin-compression).
 
 3.  **Infrastruktura Hybrydowa**
     - **Ollama Prime:** Modele lokalne (qwen2.5-coder, llama3.2) dla większości zadań.

@@ -40,10 +40,58 @@ To serce systemu. Nie jest to zwykły skrypt, ale zaawansowany moduł zarządzaj
 - **Graph Processor:** Algorytm rozwiązujący zależności między zadaniami w planie JSON. Uruchamia zadania równolegle, gdy tylko ich zależności zostaną spełnione.
 - **Ollama Prime:** Domyślny tryb dla agentów wykonawczych (Worker Agents). Używa lokalnych modeli (Llama, Qwen) dla szybkości i prywatności.
 
-### 2. GeminiGUI (The Face)
-- **Tech Stack:** React 19, Vite 7, Tailwind 4.
-- **Rola:** Wizualizacja stanu roju. Nie zawiera logiki biznesowej AI - jedynie prezentuje to, co dzieje się w warstwie niższej.
-- **Komunikacja:** Tauri Commands (`invoke`) służą do uruchamiania procesów PowerShell i odczytu logów.
+### 2. GeminiGUI (The Face) - v0.2.0
+- **Tech Stack:** React 19.1, Vite 7.0, Tailwind 4.1, Zustand 5.0, Framer Motion 12.x.
+- **Rola:** Wizualizacja stanu roju. Nie zawiera logiki biznesowej AI - jedynie prezentuje to, co dzieje sie w warstwie nizszej.
+- **Komunikacja:** Tauri Commands (`invoke`) sluza do uruchamiania procesów PowerShell i odczytu logów.
+
+#### Optymalizacje Wydajnosci (Cross-pollination z ClaudeHydra)
+
+**LazyComponents Pattern:**
+```tsx
+// src/components/LazyComponents.tsx
+const SettingsModalLazy = lazy(() =>
+  import('./SettingsModal').then((m) => ({ default: m.SettingsModal }))
+);
+```
+- `SettingsModalLazy` - Ciezki komponent z formularzami ustawien.
+- `MemoryPanelLazy` - Wizualizacja grafu wiedzy.
+- `BridgePanelLazy` - System zatwierdzania komend.
+- `ShortcutsModalLazy` - Referencja skrótów klawiszowych.
+- `ErrorBoundaryLazy` - Obsluga bledów.
+
+**SuspenseFallback:**
+```tsx
+// src/components/SuspenseFallback.tsx
+<Loader2 className="animate-spin text-[var(--matrix-accent)]" />
+```
+- Ujednolicony loader dla wszystkich lazy komponentów.
+- Parametryzowany rozmiar (sm/md/lg).
+
+**Vite Build Optimization:**
+```ts
+// vite.config.ts
+rollupOptions: {
+  output: {
+    manualChunks: {
+      'vendor-react': ['react', 'react-dom'],
+      'vendor-markdown': ['react-markdown', 'remark-gfm'],
+      'vendor-motion': ['framer-motion'],
+      // ...
+    }
+  }
+}
+```
+
+**Compression:**
+- Gzip (threshold: 1024 bytes)
+- Brotli (threshold: 1024 bytes)
+- `vite-plugin-compression` - dual compression dla produkcji.
+
+#### Bug Fixes (v0.2.0)
+- **MessageListProps:** Poprawka typów dla komponentu listy wiadomosci.
+- **useRef initialization:** Prawidlowa inicjalizacja referencji.
+- **Unused imports:** Usuniecie niewykorzystanych importów.
 
 ### 3. Pamięć (.serena)
 System wykorzystuje strukturę katalogów `.serena` do przechowywania:
